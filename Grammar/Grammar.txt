@@ -1,3 +1,22 @@
-HtmlComment="<!--",FreeText,"-->"
+HtmlDocument = [XmlDeclaration], [DocType], {HtmlElements};
+HtmlElements = {HtmlComments}, HtmlElement, {HtmlComments};
+HtmlElement = 
+XmlDeclaration = "<?xml", XmlAttribute, {XmlAttribute}, "?>";
+XmlAttribute = XmlAttributeName, "=", XmlAttributeValue;
+XmlAttributeName = ("_", Alphanumeric)|Alphabetic, [AlphanumericUnderscore];
+XmlAttributeValue = """, [Chars], """; 
+HtmlComment = "<!--", FreeText, "-->";
+HtmlConditionalComment = "<![", Chars, "]>";
 
-FreeText=(*Any character*)
+Chars = Char, [Chars];
+Char = ?0020?..?10FFFF? – “”” (*Any character except double quote and backslash*);
+
+
+
+HtmlContent = ? Any unicode character except " or \ ?|Special;
+Special = "&", SpecialChars, ";";
+SpecialChars = Alphanumeric, [SpecialChars];
+AlphanumericUnderscore = Alphanumeric|"_";
+Alphanumeric = Alphabetic|Numeric;
+Alphabetic = "a".."z"|"A".."Z"
+Numeric = "0".."9";
